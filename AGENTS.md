@@ -31,13 +31,16 @@ When a user asks you to explain or set up their resume:
    ```
 
 ### Step 2: Querying Resume Variants & Structure
-- Run `python3 build_resume.py --list` to inspect active variants (`swe`, `systems`, etc.).
+- Run `python3 build_resume.py --list` to inspect active variants (`swe`, `ai_ml`, `frontend`, etc.).
 - Run `python3 build_resume.py --schema` to view JSON structure rules.
 
-### Step 3: Editing Bullet Points & Experiences
+### Step 3: Editing Bullet Points & Content Heuristics
 When editing or adding experiences/projects to `data/resume_bank.json`:
+- **First Bullet Rule**: Bullet #1 under any project/role MUST clearly explain what was built and what it does in plain, accessible English. Save deep technical mechanisms for Bullets #2 and #3.
+- **Selective Bolding**: Bold quantitative metrics (e.g. `\textbf{97% reduction}`, `\textbf{5+ hours/week}`) and core tech stack names to draw recruiter visual focus. Do NOT bold full sentences.
 - **Line Length Target**: Keep bullet text around **220–245 characters** so each bullet spans exactly **2 full lines** edge-to-edge across ~85%–95% of printable line width.
 - **No Orphan Widows**: Avoid single-word trailing lines (<4 trailing words). Either trim 2–3 words or expand by 10–15 characters to fill the line out.
+- **Date Consistency**: Format all dates consistently using abbreviated months (e.g. `Jun 2026 – Present`, `Aug 2025 – May 2026`).
 - **LaTeX Escaping**: Do NOT manually add LaTeX backslashes for `&`, `%`, `$`, `#`, `_` inside JSON strings. The python builder handles escaping automatically.
 
 ### Step 4: Compiling & Verifying
