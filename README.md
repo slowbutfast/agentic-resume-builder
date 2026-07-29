@@ -6,14 +6,14 @@ It maintains a single source of truth (`data/resume_bank.json`) to compile role-
 
 ---
 
-## 📌 Current Status & Known Agent Limitations
+## Current Status & Known Agent Limitations
 
 - **Data & Build Engine**: Fully functional. Generates clean 1-page LaTeX PDFs from configurable JSON databanks.
 - **Visual Agent Feedback Loop (Experimental)**: While the pipeline automatically captures image previews and computes page-fill metrics, current LLM vision models still struggle with fine-grained visual line-wrap tuning. Contributions to the visual feedback loop or bounding-box heuristic checkers are welcome!
 
 ---
 
-## ⚡ Quickstart Guide
+## Quickstart Guide
 
 1. **Clone Repository & Setup Data Bank**:
    ```bash
@@ -36,7 +36,7 @@ It maintains a single source of truth (`data/resume_bank.json`) to compile role-
 
 ---
 
-## 🤖 Pairing with AI Coding Agents (Cursor, Antigravity, Claude Code, OpenCode)
+## Pairing with AI Coding Agents (Cursor, Antigravity, Claude Code, OpenCode)
 
 This repository includes built-in AI directives in [`AGENTS.md`](AGENTS.md) and [`skills/resume-optimizer/SKILL.md`](skills/resume-optimizer/SKILL.md).
 
@@ -45,7 +45,7 @@ Simply open your AI coding agent and prompt:
 
 ---
 
-## 📐 Project Structure
+## Project Structure
 
 ```
 .
@@ -72,5 +72,5 @@ Simply open your AI coding agent and prompt:
 
 ---
 
-## 📄 License
+## License
 Licensed under the [MIT License](LICENSE). Baseline LaTeX template based on [Jake Gutierrez's Resume Template](https://github.com/sb2nov/resume).
