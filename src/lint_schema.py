@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-JSON Schema Linter & Character Density Diagnostics for Resume Bank.
-Validates data/resume_bank.json against data/resume_bank.schema.json and checks bullet character length heuristics.
+JSON Schema Linter & Layout Diagnostics for Resume Bank.
+Validates data/resume_bank.json against data/resume_bank.schema.json and checks bullet density & count heuristics.
 """
 import json
 import os
@@ -17,36 +17,77 @@ SCHEMA_PATH = os.path.join(BASE_DIR, "data", "resume_bank.schema.json")
 TARGET_MIN_CHARS = 175
 TARGET_MAX_CHARS = 230
 
-def check_bullet_character_diagnostics(data, quiet=False):
-    warnings = []
+def check_bullet_diagnostics(data, quiet=False):
+    length_warnings = []
+    count_warnings = []
     
-    sections = [
-        ("Experience", data.get("experience_bank", {})),
-        ("Project", data.get("project_bank", {}))
-    ]
+    # 1. Experience Bank Check
+    for entry_key, entry_val in data.get("experience_bank", {}).items():
+        bullets = entry_val.get("bullets", [])
+        n_bullets = len(bullets)
+        if n_bullets < 2:
+            count_warnings.append(
+                f"  💡 [Experience:{entry_key}] Has {n_bullets} bullet (recommended: 2-3 bullets for balanced density)."
+            )
+        elif n_bullets > 4:
+            count_warnings.append(
+                f"  💡 [Experience:{entry_key}] Has {n_bullets} bullets (recommended: max 3-4 bullets)."
+            )
 
-    for sec_name, bank in sections:
-        for entry_key, entry_val in bank.items():
-            for b in entry_val.get("bullets", []):
-                b_id = b.get("id", "unknown")
-                text = b.get("text", "")
-                c_len = len(text)
-                target_lines = b.get("target_line_count", 2)
+        for b in bullets:
+            b_id = b.get("id", "unknown")
+            text = b.get("text", "")
+            c_len = len(text)
+            target_lines = b.get("target_line_count", 2)
 
-                if target_lines == 2 and c_len > TARGET_MAX_CHARS:
-                    warnings.append(
-                        f"  ⚠️  [{sec_name}:{entry_key}:{b_id}] {c_len} chars (> {TARGET_MAX_CHARS} max target). Potential Line 3 overflow."
-                    )
-                elif target_lines == 2 and c_len < TARGET_MIN_CHARS:
-                    warnings.append(
-                        f"  ⚠️  [{sec_name}:{entry_key}:{b_id}] {c_len} chars (< {TARGET_MIN_CHARS} min target). Potential Line 2 right-margin underflow."
-                    )
+            if target_lines == 2 and c_len > TARGET_MAX_CHARS:
+                length_warnings.append(
+                    f"  ⚠️  [Experience:{entry_key}:{b_id}] {c_len} chars (> {TARGET_MAX_CHARS} max target). Potential Line 3 overflow."
+                )
+            elif target_lines == 2 and c_len < TARGET_MIN_CHARS:
+                length_warnings.append(
+                    f"  ⚠️  [Experience:{entry_key}:{b_id}] {c_len} chars (< {TARGET_MIN_CHARS} min target). Potential Line 2 right-margin underflow."
+                )
 
-    if warnings and not quiet:
-        print("\n--- Bullet Character Density Diagnostics (2-Line Target: 210-225 chars) ---")
-        for w in warnings:
-            print(w)
-        print("----------------------------------------------------------------------------")
+    # 2. Project Bank Check
+    for entry_key, entry_val in data.get("project_bank", {}).items():
+        bullets = entry_val.get("bullets", [])
+        n_bullets = len(bullets)
+        if n_bullets < 2:
+            count_warnings.append(
+                f"  💡 [Project:{entry_key}] Has {n_bullets} bullet (recommended: 2-3 bullets per project)."
+            )
+        elif n_bullets > 3:
+            count_warnings.append(
+                f"  💡 [Project:{entry_key}] Has {n_bullets} bullets (recommended: 2-3 bullets per project)."
+            )
+
+        for b in bullets:
+            b_id = b.get("id", "unknown")
+            text = b.get("text", "")
+            c_len = len(text)
+            target_lines = b.get("target_line_count", 2)
+
+            if target_lines == 2 and c_len > TARGET_MAX_CHARS:
+                length_warnings.append(
+                    f"  ⚠️  [Project:{entry_key}:{b_id}] {c_len} chars (> {TARGET_MAX_CHARS} max target). Potential Line 3 overflow."
+                )
+            elif target_lines == 2 and c_len < TARGET_MIN_CHARS:
+                length_warnings.append(
+                    f"  ⚠️  [Project:{entry_key}:{b_id}] {c_len} chars (< {TARGET_MIN_CHARS} min target). Potential Line 2 right-margin underflow."
+                )
+
+    if not quiet:
+        if count_warnings:
+            print("\n--- Entry Bullet Count Diagnostics (Recommended: 2-3 bullets/entry) ---")
+            for w in count_warnings:
+                print(w)
+
+        if length_warnings:
+            print("\n--- Bullet Character Density Diagnostics (2-Line Target: 210-225 chars) ---")
+            for w in length_warnings:
+                print(w)
+            print("----------------------------------------------------------------------------")
 
 def lint_resume_bank(data_path=DATA_PATH, schema_path=SCHEMA_PATH, quiet=False):
     if not os.path.exists(data_path):
@@ -85,7 +126,7 @@ def lint_resume_bank(data_path=DATA_PATH, schema_path=SCHEMA_PATH, quiet=False):
         rel_data = os.path.relpath(data_path, BASE_DIR)
         rel_schema = os.path.relpath(schema_path, BASE_DIR)
         print(f"✅ Schema Lint PASSED: '{rel_data}' conforms perfectly to '{rel_schema}'.")
-        check_bullet_character_diagnostics(data, quiet=quiet)
+        check_bullet_diagnostics(data, quiet=quiet)
 
     return True
 
