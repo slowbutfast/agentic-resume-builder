@@ -1,0 +1,205 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Resume Bank Master Schema",
+  "description": "Formal JSON Schema definition for resume_bank.json single-source-of-truth master data bank.",
+  "type": "object",
+  "required": [
+    "template_metadata",
+    "header",
+    "education",
+    "experience_bank",
+    "project_bank",
+    "skills",
+    "configurations"
+  ],
+  "properties": {
+    "template_metadata": {
+      "type": "object",
+      "description": "Metadata regarding the target LaTeX baseline template and page budget rules.",
+      "required": [
+        "template_source",
+        "document_class",
+        "font_size",
+        "paper_size",
+        "margins",
+        "max_page_budget",
+        "last_verified_timestamp"
+      ],
+      "properties": {
+        "template_source": { "type": "string" },
+        "document_class": { "type": "string" },
+        "font_size": { "type": "string" },
+        "paper_size": { "type": "string" },
+        "margins": {
+          "type": "object",
+          "required": [
+            "horizontal_adj",
+            "textwidth_adj",
+            "top_adj",
+            "textheight_adj"
+          ],
+          "properties": {
+            "horizontal_adj": { "type": "string" },
+            "textwidth_adj": { "type": "string" },
+            "top_adj": { "type": "string" },
+            "textheight_adj": { "type": "string" }
+          }
+        },
+        "max_page_budget": { "type": "integer" },
+        "last_verified_timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "header": {
+      "type": "object",
+      "description": "Applicant contact details, links, and identifiers.",
+      "required": [
+        "name",
+        "email",
+        "phone",
+        "linkedin",
+        "linkedin_url",
+        "github",
+        "github_url"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "linkedin": { "type": "string" },
+        "linkedin_url": { "type": "string", "format": "uri" },
+        "github": { "type": "string" },
+        "github_url": { "type": "string", "format": "uri" }
+      }
+    },
+    "education": {
+      "type": "array",
+      "description": "List of educational institutions and degrees.",
+      "items": {
+        "type": "object",
+        "required": [
+          "institution",
+          "location",
+          "degree",
+          "dates",
+          "coursework"
+        ],
+        "properties": {
+          "institution": { "type": "string" },
+          "location": { "type": "string" },
+          "degree": { "type": "string" },
+          "dates": { "type": "string" },
+          "coursework": { "type": "string" }
+        }
+      }
+    },
+    "experience_bank": {
+      "type": "object",
+      "description": "Keyed dictionary of technical experience entries.",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "company",
+          "title",
+          "location",
+          "dates",
+          "bullets"
+        ],
+        "properties": {
+          "company": { "type": "string" },
+          "title": { "type": "string" },
+          "location": { "type": "string" },
+          "dates": { "type": "string" },
+          "bullets": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/bullet_item" }
+          }
+        }
+      }
+    },
+    "project_bank": {
+      "type": "object",
+      "description": "Keyed dictionary of software engineering projects.",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "name",
+          "tech_stack",
+          "dates",
+          "bullets"
+        ],
+        "properties": {
+          "name": { "type": "string" },
+          "tech_stack": { "type": "string" },
+          "dates": { "type": "string" },
+          "bullets": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/bullet_item" }
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "description": "Categorized technical skills and personal interests.",
+      "required": [
+        "languages",
+        "frameworks",
+        "tools",
+        "developer_ai",
+        "interests"
+      ],
+      "properties": {
+        "languages": { "type": "string" },
+        "frameworks": { "type": "string" },
+        "tools": { "type": "string" },
+        "developer_ai": { "type": "string" },
+        "interests": { "type": "string" }
+      }
+    },
+    "configurations": {
+      "type": "object",
+      "description": "Modular variant definitions defining output filename, title, experiences, and selected projects.",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "output_filename",
+          "title",
+          "experiences",
+          "projects"
+        ],
+        "properties": {
+          "output_filename": { "type": "string" },
+          "title": { "type": "string" },
+          "experiences": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "projects": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "bullet_item": {
+      "type": "object",
+      "required": [
+        "id",
+        "text",
+        "target_line_count",
+        "verification_status"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "text": { "type": "string" },
+        "target_line_count": { "type": "integer" },
+        "verification_status": {
+          "type": "string",
+          "enum": ["verified_full_width", "pending_verification"]
+        }
+      }
+    }
+  }
+}

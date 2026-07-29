@@ -1,0 +1,144 @@
+{
+  "template_metadata": {
+    "template_source": "main.tex (Jake Gutierrez Baseline)",
+    "document_class": "article",
+    "font_size": "11pt",
+    "paper_size": "letterpaper",
+    "margins": {
+      "horizontal_adj": "-0.5in",
+      "textwidth_adj": "1.0in",
+      "top_adj": "-0.5in",
+      "textheight_adj": "1.0in"
+    },
+    "max_page_budget": 1,
+    "last_verified_timestamp": "2026-07-29T18:30:00Z"
+  },
+  "header": {
+    "name": "ALEX R. RIVERA",
+    "email": "alex.rivera@example.com",
+    "phone": "(555) 019-2834",
+    "linkedin": "linkedin.com/in/alex-rivera-demo",
+    "linkedin_url": "https://linkedin.com/in/alex-rivera-demo",
+    "github": "github.com/alex-rivera-demo",
+    "github_url": "https://github.com/alex-rivera-demo"
+  },
+  "education": [
+    {
+      "institution": "State University",
+      "location": "San Francisco, CA",
+      "degree": "B.S. Computer Science (3.85/4.0 GPA)",
+      "dates": "Expected May 2027",
+      "coursework": "Data Structures & Algorithms, Software Engineering, Operating Systems, Computer Networks, Discrete Mathematics"
+    }
+  ],
+  "experience_bank": {
+    "cloud_systems_lab": {
+      "company": "Cloud Systems Research Lab",
+      "title": "Software Engineering Intern",
+      "location": "San Francisco, CA",
+      "dates": "June 2026 – Present",
+      "bullets": [
+        {
+          "id": "cloud_high_throughput",
+          "text": "Engineered a high-throughput data processing pipeline in Python using Pandas and AsyncIO, reducing batch processing latency by 45% across distributed storage clusters.",
+          "target_line_count": 2,
+          "verification_status": "verified_full_width"
+        },
+        {
+          "id": "cloud_rest_api",
+          "text": "Integrated REST APIs with strict Pydantic JSON schema validation and Redis caching, cutting redundant database queries by 85% during peak load testing.",
+          "target_line_count": 2,
+          "verification_status": "verified_full_width"
+        }
+      ]
+    },
+    "campus_tech_support": {
+      "company": "University IT Services",
+      "title": "Technical Support Assistant",
+      "location": "San Francisco, CA",
+      "dates": "August 2025 – May 2026",
+      "bullets": [
+        {
+          "id": "tech_automation_script",
+          "text": "Automated campus device provisioning by writing Bash and Python scripts, reducing manual setup time per machine from 45 minutes to under 5 minutes.",
+          "target_line_count": 2,
+          "verification_status": "verified_full_width"
+        }
+      ]
+    }
+  },
+  "project_bank": {
+    "distributed-kv-store": {
+      "name": "distributed-kv-store",
+      "tech_stack": "Go, Raft Consensus, gRPC, Docker",
+      "dates": "Jan 2026 – Present",
+      "bullets": [
+        {
+          "id": "kv_raft_consensus",
+          "text": "Implemented a fault-tolerant distributed key-value store in Go utilizing the Raft consensus algorithm, guaranteeing linearizable read/write operations during node failures.",
+          "target_line_count": 2,
+          "verification_status": "verified_full_width"
+        },
+        {
+          "id": "kv_grpc_benchmarks",
+          "text": "Designed high-performance gRPC interfaces backed by embedded LevelDB storage, achieving 12,000+ operations per second in multi-node Docker benchmark simulations.",
+          "target_line_count": 2,
+          "verification_status": "verified_full_width"
+        }
+      ]
+    },
+    "vector-search-engine": {
+      "name": "vector-search-engine",
+      "tech_stack": "Python, HNSWlib, FastAPI, Pytest",
+      "dates": "Nov 2025 – Dec 2025",
+      "bullets": [
+        {
+          "id": "vector_hnsw_indexing",
+          "text": "Architected an in-memory vector search engine utilizing HNSW graph indexing for fast approximate nearest-neighbor retrieval across 500K+ high-dimensional embeddings.",
+          "target_line_count": 2,
+          "verification_status": "verified_full_width"
+        },
+        {
+          "id": "vector_fastapi_tests",
+          "text": "Exposed async search endpoints via FastAPI with comprehensive Pytest coverage, delivering sub-15ms vector query latencies under concurrent load.",
+          "target_line_count": 2,
+          "verification_status": "verified_full_width"
+        }
+      ]
+    },
+    "smart-task-dashboard": {
+      "name": "Smart Task Dashboard",
+      "tech_stack": "React 19, TypeScript, Tailwind CSS, Vite",
+      "dates": "Sep 2025 – Oct 2025",
+      "bullets": [
+        {
+          "id": "task_react_dashboard",
+          "text": "Built a responsive task management dashboard in React 19 featuring drag-and-drop Kanban boards, real-time status synchronization, and custom Tailwind styling.",
+          "target_line_count": 2,
+          "verification_status": "verified_full_width"
+        }
+      ]
+    }
+  },
+  "skills": {
+    "languages": "Python, Go, JavaScript/TypeScript, C/C++, SQL, HTML/CSS",
+    "frameworks": "React 19, FastAPI, Express, Node.js, Pytest, Tailwind CSS",
+    "tools": "Docker, Git, PostgreSQL, Redis, gRPC, REST APIs, Linux",
+    "developer_ai": "Cursor, Anti-Gravity CLI, OpenCode, Claude Code",
+    "interests": "Open Source Contributing, Cycling, Jazz Music, Chess"
+  },
+  "configurations": {
+    "swe": {
+      "output_filename": "resume_swe",
+      "title": "Full-Stack Software Engineering Focus",
+      "experiences": ["cloud_systems_lab", "campus_tech_support"],
+      "projects": ["distributed-kv-store", "vector-search-engine", "smart-task-dashboard"]
+    },
+    "systems": {
+      "output_filename": "resume_systems",
+      "title": "Systems & Cloud Infrastructure Focus",
+      "experiences": ["cloud_systems_lab", "campus_tech_support"],
+      "projects": ["distributed-kv-store", "vector-search-engine"]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+# Build directory for generated TeX, PDF, and Preview files
+build/
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Optional personal resume data bank (uncomment if you want to keep your private data bank local)
+# data/resume_bank.json
