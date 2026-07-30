@@ -14,5 +14,11 @@ build/
 __pycache__/
 *.pyc
 
-# Optional personal resume data bank (uncomment if you want to keep your private data bank local)
+# Local user backups
+*.user_backup.json
+*.backup.json
+*.bak
+
+# Optional personal resume data bank (uncomment to keep private contact details local)
 # data/resume_bank.json
+

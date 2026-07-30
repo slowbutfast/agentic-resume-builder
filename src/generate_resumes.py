@@ -246,7 +246,7 @@ def analyze_image_fill(image_path):
 
 from lint_schema import lint_resume_bank
 
-def main():
+def main(role_key=None):
     ensure_dirs()
 
     print("==================================================")
@@ -266,9 +266,19 @@ def main():
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
+    configurations = data.get("configurations", {})
+    if role_key:
+        if role_key not in configurations:
+            print(f"❌ Error: Specified role key '{role_key}' not found in data/resume_bank.json configurations.")
+            print(f"Available roles: {', '.join(configurations.keys())}")
+            sys.exit(1)
+        target_configs = {role_key: configurations[role_key]}
+    else:
+        target_configs = configurations
+
     results = []
 
-    for config_key, config in data["configurations"].items():
+    for config_key, config in target_configs.items():
         out_name = config["output_filename"]
         tex_path = os.path.join(TEX_DIR, f"{out_name}.tex")
         pdf_path = os.path.join(PDF_DIR, f"{out_name}.pdf")
