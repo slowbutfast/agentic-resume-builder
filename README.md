@@ -1,31 +1,45 @@
-# 🚀 agentic-resume-builder
+# agentic-resume-builder
 
 > **An Agentic-Native Resume Engineering Engine built around *you* and *your AI assistant*—not the other way around.**
 
 `agentic-resume-builder` is a data-driven system for engineering, auditing, tailoring, and compiling role-focused 1-page software engineering resumes using LaTeX (`templates/main.tex`). 
 
-Rather than forcing developers into rigid web forms or third-party SaaS tools, this project is built from the ground up for seamless human-AI pair programming. It provides deterministic CLI CRUD flags, formal JSON Schema validation (`data/resume_bank.schema.json`), 150 DPI PNG preview rendering (`build/previews/`), and specialized AI agent skills (`skills/`) that allow your AI coding assistant (Cursor, Antigravity, Claude Code, OpenCode) to autonomously inspect, tailor, and optimize resume line density for targeted job listings.
+Rather than forcing developers into rigid web forms or third-party SaaS tools, this project is built to work with your agentic workflow. It provides deterministic CLI CRUD flags, formal JSON Schema validation (`data/resume_bank.schema.json`), 150 DPI PNG preview rendering (`build/previews/`), and specialized AI agent skills (`skills/`) that allow your AI coding assistant (OpenCode, Antigravity, Claude Code, Codex, Cursor) to autonomously inspect, tailor, and optimize resume line density for targeted job listings.
+
+> **Project Goal**: Whether adapting an existing resume or engineering a new one from scratch, this system gets you **~90% of the way there** automatically. From there, you can fine-tune, iterate, and tailor it to your exact needs.
 
 ---
 
-## 🏁 New User Quickstart Guide
+## New User Quickstart Guide
 
 Getting started takes less than two minutes:
 
-### 1. Initialize Your Master Data Bank
-Copy the starter anonymized data bank to create your single-source-of-truth JSON file:
+> Note: you can also make your agent set this up for you instead.
+
+### 1. Install Agent Skills
+Install the repository skills to equip your AI coding assistant:
 ```bash
-cp data/resume_bank.example.json data/resume_bank.json
+npx skills
 ```
 
-### 2. Inspect Active Roles & Entry Slugs
+> Note: If this doesn't work, ask your agent to install the skills for you.
+
+### 2. Create Markdown Source of Truth
+Have your AI assistant parse your existing project codebases or current resume to generate a Markdown file (e.g., `docs/PROJECT_SPECS.md` or `docs/EXPERIENCE_BANK.md`). This Markdown document serves as your master source of truth for all raw project specifications, metrics, and background experience, making manual review, CRUD updates, formatting decisions, and fine-tune tailoring intuitive.
+
+### 3. Populate Resume Bank JSON
+From the Markdown source of truth, have the agent extract and format targeted bullet points into `data/resume_bank.json` structured specifically for your target resume roles.
+
+*(Alternatively, initialize manually by copying the starter template: `cp data/resume_bank.example.json data/resume_bank.json`)*
+
+### 4. Inspect Active Roles & Entry Slugs
 Run the CLI summary tool to view all configured job roles, project keys, experience keys, and bullet IDs:
 ```bash
 python3 build_resume.py --summary
 # or simply: python3 build_resume.py -s
 ```
 
-### 3. Compile Tailored PDFs & Render Previews
+### 5. Compile Tailored PDFs & Render Previews
 Compile all resume roles into PDFs (`build/pdf/`) and 150 DPI PNG previews (`build/previews/`), or compile a single target role:
 ```bash
 # Build all configured resume roles
@@ -35,7 +49,7 @@ python3 build_resume.py
 python3 build_resume.py --role swe
 ```
 
-### 4. Validate Data Bank Schema
+### 6. Validate Data Bank Schema
 Run automated JSON Schema validation and 2-line bullet density diagnostics anytime:
 ```bash
 python3 build_resume.py --lint
@@ -43,7 +57,7 @@ python3 build_resume.py --lint
 
 ---
 
-## 🛠️ CLI Operations & Deterministic Agent Flags
+## CLI Operations & Deterministic Agent Flags
 
 `build_resume.py` includes a self-documenting CLI helper interface with full `--help` documentation:
 
@@ -77,7 +91,7 @@ Bullet CRUD (Auto-resolves Parent Key):
 
 ---
 
-## 🤖 Pairing with AI Coding Assistants
+## Pairing with AI Coding Assistants
 
 This repository contains dedicated agent directives in [`AGENTS.md`](AGENTS.md) and modular skills in `skills/`:
 
@@ -87,7 +101,7 @@ This repository contains dedicated agent directives in [`AGENTS.md`](AGENTS.md) 
 
 ---
 
-## 📐 Project Structure & Directory Layout
+## Project Structure & Directory Layout
 
 ```
 .
@@ -127,23 +141,18 @@ This repository contains dedicated agent directives in [`AGENTS.md`](AGENTS.md) 
 
 ---
 
-## ⚠️ Important Directives, Shortcomings & Open Source Contributions
+## Important Guidelines
 
-### 1. Human Inspection & Authenticity Mandate (Do NOT Trust LLMs 100%)
-- **Always Manually Review Generated Resumes**: While `agentic-resume-builder` automates formatting, character density diagnostics, and data bank CRUD operations, **you must always manually inspect your compiled PDF resumes (`build/pdf/`) and verify technical metrics before applying or interviewing**.
-- **Zero Fabricated Data**: AI agents must never hallucinate fake production metrics (e.g., fake user counts or unverified benchmark numbers). Frame achievements around real architectural implementations or derived code characteristics.
+### 1. Mandatory Human Verification
+AI agents assist with extraction, bullet auditing, line-density tuning, and LaTeX compilation, but final outputs must be thoroughly reviewed by a human. Always verify the accuracy of metrics, dates, and claims in compiled PDF resumes (`build/pdf/`) prior to job applications.
 
-### 2. Known Limitations & Features Needing Work
-- **Line-Wrap & Character Width Heuristics**: The CLI linter evaluates raw character lengths, but variable-width proportional fonts and LaTeX formatting tags (`\textbf{...}`) can cause edge cases. Work is underway to calculate printable character widths strictly ([Issue #11](https://github.com/slowbutfast/resume/issues/11)).
-- **Zero-Install NPX Package**: CLI commands currently run via Python. Packaging into a zero-install `npx agentic-resume-builder` executable wrapper is tracked in [Issue #8](https://github.com/slowbutfast/resume/issues/8).
-- **Automated Resume Importer**: Parsing existing raw PDFs/Word docs automatically into `data/resume_bank.json` is tracked in [Issue #10](https://github.com/slowbutfast/resume/issues/10).
-
-### 3. Community Contributions Welcome!
-We welcome open-source contributions! Whether you want to improve visual bounding-box checkers, enhance LaTeX baseline templates, expand AI agent skills, or contribute bug fixes, feel free to open a Pull Request or Issue.
+### 2. Open Source Contributions
+Community contributions are welcome. Feel free to submit pull requests or issues for expanding agent skills, refining LaTeX templates, or improving build tools and diagnostics.
 
 ---
 
-## 📜 License & Credits
+## License & Credits
 
 Licensed under the [MIT License](LICENSE). Baseline LaTeX formatting adapted from **Jake Gutierrez's Gold-Standard Resume Template** (`r/EngineeringResumes`).
+
 
