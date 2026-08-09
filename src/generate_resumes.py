@@ -3,7 +3,6 @@ import json
 import os
 import subprocess
 import sys
-from PIL import Image
 
 # Base Directory Paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -226,6 +225,17 @@ def build_latex_content(data, config_key):
 
 def analyze_image_fill(image_path):
     """Calculates vertical fill percentage of printable page height."""
+    # Imported lazily so inspection commands (--summary, --lint, CRUD flags)
+    # stay usable without Pillow installed.
+    try:
+        from PIL import Image
+    except ImportError:
+        sys.exit(
+            "Missing dependency: Pillow (required for preview fill analysis)\n"
+            "Install the project requirements first:\n"
+            "    pip install -r requirements.txt"
+        )
+
     img = Image.open(image_path).convert('L')
     width, height = img.size
     
@@ -246,7 +256,25 @@ def analyze_image_fill(image_path):
 
 from lint_schema import lint_resume_bank
 
+def check_system_binaries():
+    """Fails early with install hints if the LaTeX toolchain is missing."""
+    import shutil
+
+    hints = {
+        "pdflatex": "macOS: brew install --cask mactex-no-gui | Debian/Ubuntu: sudo apt install texlive-latex-extra | Windows: https://miktex.org/download",
+        "pdftoppm": "macOS: brew install poppler | Debian/Ubuntu: sudo apt install poppler-utils",
+    }
+    missing = [b for b in hints if shutil.which(b) is None]
+    if missing:
+        lines = ["Missing required system binaries — cannot compile resumes:"]
+        for b in missing:
+            lines.append(f"  - {b}\n      {hints[b]}")
+        lines.append("\nSee the Prerequisites section of the README for details.")
+        sys.exit("\n".join(lines))
+
+
 def main(role_key=None):
+    check_system_binaries()
     ensure_dirs()
 
     print("==================================================")
