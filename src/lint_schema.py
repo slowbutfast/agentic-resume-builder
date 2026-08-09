@@ -6,7 +6,15 @@ Validates data/resume_bank.json against data/resume_bank.schema.json and checks 
 import json
 import os
 import sys
-import jsonschema
+
+try:
+    import jsonschema
+except ImportError:
+    sys.exit(
+        "Missing dependency: jsonschema\n"
+        "Install the project requirements first:\n"
+        "    pip install -r requirements.txt"
+    )
 
 # Base directory paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

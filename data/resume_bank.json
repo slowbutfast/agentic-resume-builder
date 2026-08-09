@@ -139,6 +139,18 @@
       "title": "Systems & Cloud Infrastructure Focus",
       "experiences": ["cloud_systems_lab", "campus_tech_support"],
       "projects": ["distributed-kv-store", "vector-search-engine"]
+    },
+    "frontend": {
+      "output_filename": "resume_frontend",
+      "title": "Frontend & Product Engineering Focus",
+      "experiences": ["cloud_systems_lab", "campus_tech_support"],
+      "projects": ["smart-task-dashboard", "vector-search-engine"]
+    },
+    "ai_ml": {
+      "output_filename": "resume_ai_ml",
+      "title": "AI / Machine Learning Engineering Focus",
+      "experiences": ["cloud_systems_lab", "campus_tech_support"],
+      "projects": ["vector-search-engine", "distributed-kv-store"]
     }
   }
 }
