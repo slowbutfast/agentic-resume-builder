@@ -55,6 +55,14 @@ Run single-role build or build all:
 python3 build_resume.py --role swe
 python3 build_resume.py
 ```
+
+Build a shareable copy with personal contact info masked (phone, email, linkedin, github by default):
+```bash
+python3 build_resume.py --role swe --sanitize
+python3 build_resume.py --role swe --sanitize phone,email
+# Accepts a comma-separated subset of name,phone,email,linkedin,github.
+# PDF is saved as <role>_sanitized.pdf so the real resume is never overwritten.
+```
 Check stdout metrics:
 - Ensure all variants report `Pages: 1` and `PASSED (1 Page)`.
 - If `OVERFLOW` warning occurs: trim 3–5 words from longer bullets using `python3 build_resume.py --edit-bullet <ID> --text "..."`.

@@ -100,6 +100,23 @@ def test_entry_and_bullet_crud():
     assert code == 0, f"--delete-entry failed: {err} {out}"
     print("  ✅ Entry & Bullet CRUD passed")
 
+def test_sanitize_build():
+    print("Testing --sanitize build...")
+    data = json.load(open(DATA_BANK, encoding="utf-8"))
+    real_phone = data["header"]["phone"]
+    real_email = data["header"]["email"]
+
+    code, out, err = run_cmd(["--role", "swe", "--sanitize"])
+    assert code == 0, f"--sanitize build failed: {err} {out}"
+    assert "_sanitized" in out, "--sanitize output missing _sanitized suffix"
+
+    tex_path = os.path.join(BASE_DIR, "build", "tex", "resume_swe_sanitized.tex")
+    assert os.path.exists(tex_path), f"sanitized tex not found: {tex_path}"
+    tex = open(tex_path, encoding="utf-8").read()
+    assert real_phone not in tex, "real phone leaked into sanitized output"
+    assert real_email not in tex, "real email leaked into sanitized output"
+    print("  ✅ --sanitize passed")
+
 def main():
     setup_backup()
     try:
@@ -107,6 +124,7 @@ def main():
         test_summary()
         test_role_crud_and_single_build()
         test_entry_and_bullet_crud()
+        test_sanitize_build()
         print("\n🎉 ALL CLI CRUD TESTS PASSED!")
     finally:
         restore_backup()
