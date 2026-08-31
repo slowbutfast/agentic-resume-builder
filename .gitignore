@@ -19,6 +19,11 @@ __pycache__/
 *.backup.json
 *.bak
 
+# Virtualenv and agent state directories
+.venv/
+.opencode/
+.agent/
+
 # Optional personal resume data bank (uncomment to keep private contact details local)
 # data/resume_bank.json
 
