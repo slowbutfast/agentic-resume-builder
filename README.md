@@ -23,6 +23,8 @@ Verify the two binaries are on your `PATH` before building:
 pdflatex --version && pdftoppm -v
 ```
 
+> **On Windows**, the interpreter is usually `python` or `py`, not `python3`. Every command below is written as `python3` — substitute accordingly, or run them inside WSL.
+
 ---
 
 ## New User Quickstart Guide
@@ -66,38 +68,78 @@ cp data/resume_bank.example.json data/resume_bank.json
 
 > This file is listed in `.gitignore`, so the real name, phone, email, and GPA you put in it stay on your machine and can never be committed by accident. Only `data/resume_bank.example.json` is tracked in the repository.
 
-The starter template is fully populated demo data, so you can run every command below immediately and see the tool work before replacing it with your own material.
+### 5. Build the Starter Resumes
+Before touching any of your own material, compile what ships with the repo:
+```bash
+python3 build_resume.py
+```
 
-### 5. Create Markdown Source of Truth
-Have your AI assistant parse your existing project codebases or current resume to generate a Markdown file (e.g., `docs/PROJECT_SPECS.md` or `docs/EXPERIENCE_BANK.md`). This Markdown document serves as your master source of truth for all raw project specifications, metrics, and background experience, making manual review, CRUD updates, formatting decisions, and fine-tune tailoring intuitive.
+You get four PDFs in `build/pdf/` and four 150 DPI previews in `build/previews/`:
 
-### 6. Populate Resume Bank JSON
-From the Markdown source of truth, have the agent extract and format targeted bullet points into `data/resume_bank.json` structured specifically for your target resume roles.
+```text
+Variant      | Pages  | Vertical Fill %  | Status
+swe          | 1      | 68.2           % | PASSED (1 Page)
+systems      | 1      | 62.9           % | PASSED (1 Page)
+frontend     | 1      | 59.8           % | PASSED (1 Page)
+ai_ml        | 1      | 62.9           % | PASSED (1 Page)
+```
 
-### 7. Inspect Active Roles & Entry Slugs
-Run the CLI summary tool to view all configured job roles, project keys, experience keys, and bullet IDs:
+Four role profiles ship out of the box — `swe` (full-stack), `systems` (distributed systems & infrastructure), `frontend`, and `ai_ml`. Each selects from the *same* underlying `experience_bank` and `project_bank`, so editing a bullet once updates every role that references it. Build a single role with `python3 build_resume.py --role swe`.
+
+### 6. Run Your First Optimization Loop
+Now run the linter:
+```bash
+python3 build_resume.py --lint
+```
+
+It reports 8 warnings. That is deliberate:
+
+```text
+⚠️  [Project:vector-search-engine:vector_fastapi_tests] 144 chars (< 175 min target).
+💡 [Project:smart-task-dashboard] Has 1 bullet (recommended: 2-3 bullets per project).
+...
+```
+
+**The starter bank is intentionally unoptimized.** Every bullet runs short, two entries have only one bullet, and the pages sit at 59–68% vertical fill against the 85–95% target. It's a realistic first draft — the same shape your resume will be in when you first import it — so you can practice the loop here before your own content is on the line.
+
+There are two distinct problems to fix, and they behave differently:
+
+**Horizontal — a bullet too short to fill its last line.** Expand it with a real technical specific:
+```bash
+python3 build_resume.py --edit-bullet vector_fastapi_tests \
+  --text "Exposed async search endpoints via FastAPI with 40+ Pytest cases covering filter, pagination, and cold-start paths, delivering sub-15ms p99 vector query latencies under 200 concurrent connections."
+```
+That takes it from 144 to 196 chars and clears the warning. Note the page is still 68.2% full — tightening a bullet fixes the right margin, not the page height.
+
+**Vertical — a page that doesn't reach the bottom.** For that you need *more* bullets, not longer ones:
+```bash
+python3 build_resume.py --add-bullet smart-task-dashboard --id task_vite_perf \
+  --text "Optimized the Vite production build with route-level code splitting and lazy-loaded chart bundles, cutting first-contentful-paint from 2.4s to 0.9s on throttled 3G device profiles."
+```
+Rebuild and the `swe` variant moves 68.2% → 71.3%, with the one-bullet hint gone.
+
+Then look at the result — this step is not optional:
+```bash
+python3 build_resume.py --role swe
+# open build/previews/preview_resume_swe-1.png
+```
+
+Repeat until the page is edge-to-edge and no line ends in a one-word orphan. Fix a few by hand to get the feel, then hand the rest to your agent — `skills/resume-optimizer` and `docs/prompts/prompt_looping.md` automate exactly this loop.
+
+> **On the diagnostics:** they're heuristics, not verdicts. The character thresholds approximate how a line will wrap, but bold spans and long unbreakable tokens throw them off in both directions ([#1](https://github.com/slowbutfast/agentic-resume-builder/issues/1)). A bullet can be flagged and render fine, or pass and wrap badly. **The rendered PNG is the source of truth** — always look at the preview before trusting a number.
+
+### 7. Inspect Roles, Entries & Bullet IDs
+Print the full tree of role configurations, entry keys, and bullet IDs (with char counts) — this is how you find the slug to pass to any CRUD flag:
 ```bash
 python3 build_resume.py --summary
 # or simply: python3 build_resume.py -s
 ```
 
-### 8. Compile Tailored PDFs & Render Previews
-Compile all resume roles into PDFs (`build/pdf/`) and 150 DPI PNG previews (`build/previews/`), or compile a single target role:
-```bash
-# Build all configured resume roles
-python3 build_resume.py
+### 8. Build Your Markdown Source of Truth
+Now make it yours. Have your AI assistant parse your existing project codebases or current resume into a Markdown file (e.g. `docs/PROJECT_SPECS.md` or `docs/EXPERIENCE_BANK.md`). This document is your master record of raw project specifications, metrics, and background experience — richer than any single resume, and the thing you draw from when tailoring. `skills/project-auditor` is built for this.
 
-# Or build a specific tailored role profile
-python3 build_resume.py --role swe
-```
-
-The starter bank ships with four role profiles you can build immediately — `swe` (full-stack), `systems` (distributed systems & infrastructure), `frontend`, and `ai_ml`. Each one selects from the *same* underlying `experience_bank` and `project_bank`, so editing a bullet once updates every role that references it.
-
-### 9. Validate Data Bank Schema
-Run automated JSON Schema validation and 2-line bullet density diagnostics anytime:
-```bash
-python3 build_resume.py --lint
-```
+### 9. Populate the Bank & Tailor
+From that Markdown source, have the agent extract and format targeted bullets into `data/resume_bank.json` for each role you're applying to, then run the loop from step 6 until every variant is one clean page. `skills/resume-bank-editor` handles the tailoring pass against a specific job description.
 
 ---
 
@@ -169,7 +211,7 @@ Standalone prompts you can paste into any assistant live in `docs/prompts/`:
 │
 ├── data/                     # Source-of-truth data bank & schemas
 │   ├── resume_bank.json      # YOUR private bank — git ignored, created from the example
-│   ├── resume_bank.example.json # Starter anonymized template (the tracked one)
+│   ├── resume_bank.example.json # Anonymized starter template — deliberately unoptimized
 │   └── resume_bank.schema.json # Formal JSON Schema (Draft-07 specification)
 │
 ├── templates/                # LaTeX baseline templates
