@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import os
+import shutil
 import subprocess
 import sys
 
@@ -357,13 +358,16 @@ def main(role_key=None, sanitize_fields=None):
         with open(tex_path, "w", encoding="utf-8") as f:
             f.write(tex_content)
 
-        # Compile pdflatex into TEX_DIR and move output to PDF_DIR
-        cmd_compile = ["pdflatex", f"-output-directory={PDF_DIR}", "-interaction=nonstopmode", tex_path]
+        # Compile into TEX_DIR so the .aux/.log/.out noise lands beside the .tex
+        # source, then move only the finished PDF into PDF_DIR.
+        cmd_compile = ["pdflatex", f"-output-directory={TEX_DIR}", "-interaction=nonstopmode", tex_path]
         res = subprocess.run(cmd_compile, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         if res.returncode != 0:
             print(f"FAILED: pdflatex compilation error for {tex_path}")
             print(res.stdout[-500:])
             continue
+
+        shutil.move(os.path.join(TEX_DIR, f"{out_name}.pdf"), pdf_path)
 
         # Render PNG preview at 150 DPI
         cmd_png = ["pdftoppm", "-png", "-r", "150", pdf_path, png_prefix]

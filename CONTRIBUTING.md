@@ -33,6 +33,8 @@ python3 tests/test_cli_crud.py      # CLI CRUD regression suite
 
 **Don't commit personal data.** `data/resume_bank.json` is git-ignored and never tracked — it's your private working copy, created from `data/resume_bank.example.json`. If you're changing the sample data itself, edit `resume_bank.example.json` (anonymized, `ALEX R. RIVERA`) and keep your real bank out of the diff.
 
+**The example bank is unoptimized on purpose.** `data/resume_bank.example.json` trips 8 linter warnings and renders at 59–68% fill by design — it's the practice material for the optimization loop in README step 6. Please don't send a PR padding those bullets; if you want to improve the onboarding, improve the walkthrough instead.
+
 **Keep the CLI deterministic.** The whole point of the CLI flags is that an agent can call them and get a predictable result. Avoid interactive prompts or anything that requires a human at the keyboard mid-command.
 
 **Schema changes need a migration note.** If you change `resume_bank.schema.json`, say in the PR description what existing banks need to do to stay valid.
