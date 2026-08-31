@@ -187,11 +187,9 @@ def build_latex_content(data, config_key):
             continue
         proj = proj_bank[proj_key]
         p_name = escape_latex(proj['name'])
-        p_stack = escape_latex(proj['tech_stack'])
-        p_dates = escape_latex(proj['dates'])
 
         tex.append(f"      \\resumeProjectHeading")
-        tex.append(f"          {{\\textbf{{{p_name}}} $|$ \\emph{{{p_stack}}}}}{{{p_dates}}}")
+        tex.append(f"          {{\\textbf{{{p_name}}}}}{{}}")
         tex.append(f"          \\resumeItemListStart")
         for bullet in proj['bullets']:
             b_text = escape_latex(bullet['text'])
