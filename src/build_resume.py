@@ -345,6 +345,10 @@ def main_cli():
   # 6. Schema Linting & Help
   python3 build_resume.py --lint
   python3 build_resume.py --schema
+
+  # 7. Build a shareable resume with personal contact info masked
+  python3 build_resume.py --role swe --sanitize
+  python3 build_resume.py --role swe --sanitize phone,email
 """
     )
 
@@ -354,6 +358,8 @@ def main_cli():
     parser.add_argument("--lint", action="store_true", help="Run JSON Schema validation and bullet density checks")
     parser.add_argument("--schema", action="store_true", help="Print human-readable JSON Schema cheat-sheet")
     parser.add_argument("--list", action="store_true", help="List active resume roles and selected experiences/projects")
+    parser.add_argument("--sanitize", nargs="?", const="phone,email,linkedin,github", metavar="FIELDS",
+                        help="Mask personal contact fields in the compiled output. Comma-separated subset of name,phone,email,linkedin,github (default: phone,email,linkedin,github). PDF saved as <name>_sanitized.pdf.")
 
     # Role CRUD Flags
     parser.add_argument("--add-role", action="store_true", help="Add a new job-tailored role configuration")
@@ -445,7 +451,7 @@ def main_cli():
         sys.exit(0)
     else:
         # Default: build target role or all roles
-        run_build(role_key=args.role)
+        run_build(role_key=args.role, sanitize_fields=args.sanitize)
 
 if __name__ == "__main__":
     main_cli()

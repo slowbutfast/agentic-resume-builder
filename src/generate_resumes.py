@@ -36,9 +36,39 @@ def escape_latex(text):
         text = text.replace(f'__ESC_{char}__', f'\\{char}')
     return text
 
-def build_latex_content(data, config_key):
+SANITIZED_VALUES = {
+    "name": "YOUR NAME",
+    "phone": "(555) 000-0000",
+    "email": "name@example.com",
+    "linkedin": "linkedin.com/in/redacted",
+    "linkedin_url": "https://linkedin.com/in/redacted",
+    "github": "github.com/redacted",
+    "github_url": "https://github.com/redacted",
+}
+
+def mask_header(header, fields):
+    """Returns a copy of the header with selected personal fields replaced by placeholders."""
+    masked = dict(header)
+    for field in fields:
+        if field == "email":
+            masked["email"] = SANITIZED_VALUES["email"]
+        elif field == "phone":
+            masked["phone"] = SANITIZED_VALUES["phone"]
+        elif field == "linkedin":
+            masked["linkedin"] = SANITIZED_VALUES["linkedin"]
+            masked["linkedin_url"] = SANITIZED_VALUES["linkedin_url"]
+        elif field == "github":
+            masked["github"] = SANITIZED_VALUES["github"]
+            masked["github_url"] = SANITIZED_VALUES["github_url"]
+        elif field == "name":
+            masked["name"] = SANITIZED_VALUES["name"]
+    return masked
+
+def build_latex_content(data, config_key, sanitize_fields=None):
     config = data["configurations"][config_key]
     header = data["header"]
+    if sanitize_fields:
+        header = mask_header(header, sanitize_fields)
     edu_list = data["education"]
     exp_bank = data["experience_bank"]
     proj_bank = data["project_bank"]
@@ -269,9 +299,19 @@ def check_system_binaries():
         sys.exit("\n".join(lines))
 
 
-def main(role_key=None):
+def main(role_key=None, sanitize_fields=None):
     check_system_binaries()
     ensure_dirs()
+
+    # Parse optional --sanitize field list (comma-separated)
+    sanitize = None
+    if sanitize_fields:
+        known = {"name", "phone", "email", "linkedin", "github"}
+        fields = set(f.strip() for f in sanitize_fields.split(",") if f.strip())
+        unknown = fields - known
+        if unknown:
+            print(f"⚠️  Warning: ignoring unknown --sanitize fields: {', '.join(sorted(unknown))} (valid: {', '.join(sorted(known))})")
+        sanitize = fields & known or None
 
     print("==================================================")
     print("RESUME GENERATION & PREVIEW RENDERER")
@@ -304,12 +344,14 @@ def main(role_key=None):
 
     for config_key, config in target_configs.items():
         out_name = config["output_filename"]
+        if sanitize:
+            out_name = f"{out_name}_sanitized"
         tex_path = os.path.join(TEX_DIR, f"{out_name}.tex")
         pdf_path = os.path.join(PDF_DIR, f"{out_name}.pdf")
         png_prefix = os.path.join(PREVIEW_DIR, f"preview_{out_name}")
 
         print(f"\n---> Building Variant: [{config['title']}] ({out_name}.pdf)")
-        tex_content = build_latex_content(data, config_key)
+        tex_content = build_latex_content(data, config_key, sanitize)
         
         with open(tex_path, "w", encoding="utf-8") as f:
             f.write(tex_content)
