@@ -24,6 +24,7 @@ __pycache__/
 .opencode/
 .agent/
 
-# Optional personal resume data bank (uncomment to keep private contact details local)
-# data/resume_bank.json
+# Your personal resume data bank — kept local so contact details never reach git.
+# Create it with: cp data/resume_bank.example.json data/resume_bank.json
+data/resume_bank.json
 
