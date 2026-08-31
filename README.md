@@ -29,7 +29,15 @@ pdflatex --version && pdftoppm -v
 
 > Note: you can also make your agent set this up for you instead.
 
-### 1. Install Python Dependencies
+### 1. Get the Code
+```bash
+git clone https://github.com/slowbutfast/agentic-resume-builder.git
+cd agentic-resume-builder
+```
+
+> Use a plain `git clone` (or the green **Use this template** button) for your own resume. Only *fork* if you intend to contribute changes back — forks of a public repo are themselves public and cannot be made private, which is the last thing you want holding your contact details.
+
+### 2. Install Python Dependencies
 ```bash
 pip install -r requirements.txt
 ```
@@ -42,7 +50,7 @@ This installs `jsonschema` (schema validation) and `Pillow` (preview fill analys
 > pip install -r requirements.txt
 > ```
 
-### 2. Install Agent Skills
+### 3. Install Agent Skills
 Install the repository skills to equip your AI coding assistant:
 ```bash
 npx skills
@@ -50,22 +58,30 @@ npx skills
 
 > Note: If this doesn't work, ask your agent to install the skills for you.
 
-### 3. Create Markdown Source of Truth
+### 4. Create Your Data Bank
+`data/resume_bank.json` is your private working copy and is **not tracked by git** — create it from the anonymized starter template:
+```bash
+cp data/resume_bank.example.json data/resume_bank.json
+```
+
+> This file is listed in `.gitignore`, so the real name, phone, email, and GPA you put in it stay on your machine and can never be committed by accident. Only `data/resume_bank.example.json` is tracked in the repository.
+
+The starter template is fully populated demo data, so you can run every command below immediately and see the tool work before replacing it with your own material.
+
+### 5. Create Markdown Source of Truth
 Have your AI assistant parse your existing project codebases or current resume to generate a Markdown file (e.g., `docs/PROJECT_SPECS.md` or `docs/EXPERIENCE_BANK.md`). This Markdown document serves as your master source of truth for all raw project specifications, metrics, and background experience, making manual review, CRUD updates, formatting decisions, and fine-tune tailoring intuitive.
 
-### 4. Populate Resume Bank JSON
+### 6. Populate Resume Bank JSON
 From the Markdown source of truth, have the agent extract and format targeted bullet points into `data/resume_bank.json` structured specifically for your target resume roles.
 
-*(Alternatively, initialize manually by copying the starter template: `cp data/resume_bank.example.json data/resume_bank.json`)*
-
-### 5. Inspect Active Roles & Entry Slugs
+### 7. Inspect Active Roles & Entry Slugs
 Run the CLI summary tool to view all configured job roles, project keys, experience keys, and bullet IDs:
 ```bash
 python3 build_resume.py --summary
 # or simply: python3 build_resume.py -s
 ```
 
-### 6. Compile Tailored PDFs & Render Previews
+### 8. Compile Tailored PDFs & Render Previews
 Compile all resume roles into PDFs (`build/pdf/`) and 150 DPI PNG previews (`build/previews/`), or compile a single target role:
 ```bash
 # Build all configured resume roles
@@ -77,7 +93,7 @@ python3 build_resume.py --role swe
 
 The starter bank ships with four role profiles you can build immediately — `swe` (full-stack), `systems` (distributed systems & infrastructure), `frontend`, and `ai_ml`. Each one selects from the *same* underlying `experience_bank` and `project_bank`, so editing a bullet once updates every role that references it.
 
-### 7. Validate Data Bank Schema
+### 9. Validate Data Bank Schema
 Run automated JSON Schema validation and 2-line bullet density diagnostics anytime:
 ```bash
 python3 build_resume.py --lint
@@ -152,8 +168,8 @@ Standalone prompts you can paste into any assistant live in `docs/prompts/`:
 │   └── lint_schema.py        # Automated JSON Schema linter script
 │
 ├── data/                     # Source-of-truth data bank & schemas
-│   ├── resume_bank.json      # Master database for all experiences & projects
-│   ├── resume_bank.example.json # Starter anonymized template
+│   ├── resume_bank.json      # YOUR private bank — git ignored, created from the example
+│   ├── resume_bank.example.json # Starter anonymized template (the tracked one)
 │   └── resume_bank.schema.json # Formal JSON Schema (Draft-07 specification)
 │
 ├── templates/                # LaTeX baseline templates

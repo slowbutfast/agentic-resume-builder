@@ -324,7 +324,8 @@ def main(role_key=None, sanitize_fields=None):
 
     json_path = os.path.join(DATA_DIR, "resume_bank.json")
     if not os.path.exists(json_path):
-        print(f"Error: {json_path} not found.")
+        print(f"❌ Error: Master data file '{json_path}' not found.\n"
+              f"   Create it from the starter template:\n       cp data/resume_bank.example.json data/resume_bank.json")
         sys.exit(1)
 
     with open(json_path, "r", encoding="utf-8") as f:

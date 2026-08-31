@@ -99,7 +99,8 @@ def check_bullet_diagnostics(data, quiet=False):
 
 def lint_resume_bank(data_path=DATA_PATH, schema_path=SCHEMA_PATH, quiet=False):
     if not os.path.exists(data_path):
-        print(f"❌ Schema Lint Error: Data file '{data_path}' not found.", file=sys.stderr)
+        print(f"❌ Schema Lint Error: Data file '{data_path}' not found.\n"
+              f"   Create it from the starter template:\n       cp data/resume_bank.example.json data/resume_bank.json", file=sys.stderr)
         return False
 
     if not os.path.exists(schema_path):

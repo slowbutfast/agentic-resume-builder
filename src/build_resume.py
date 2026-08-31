@@ -23,7 +23,8 @@ BANK_PATH = os.path.join(DATA_DIR, "resume_bank.json")
 
 def load_bank_data():
     if not os.path.exists(BANK_PATH):
-        print(f"❌ Error: Master data file '{BANK_PATH}' not found.", file=sys.stderr)
+        print(f"❌ Error: Master data file '{BANK_PATH}' not found.\n"
+              f"   Create it from the starter template:\n       cp data/resume_bank.example.json data/resume_bank.json", file=sys.stderr)
         sys.exit(1)
     try:
         with open(BANK_PATH, "r", encoding="utf-8") as f:
