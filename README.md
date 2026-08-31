@@ -100,6 +100,11 @@ Inspection & Diagnostics:
 Compilation Targets:
   python3 build_resume.py              Build all configured resume roles
   python3 build_resume.py --role <KEY> Build only the specified tailored role (e.g. backend_eng)
+  python3 build_resume.py --role <KEY> --sanitize [FIELDS]
+                                     Build with personal contact fields masked.
+                                     Comma-separated subset of name,phone,email,linkedin,github
+                                     (default: phone,email,linkedin,github). PDF is saved as
+                                     <name>_sanitized.pdf so the real resume is never overwritten.
 
 Job-Tailored Role CRUD:
   --add-role --key <KEY> --title "<TITLE>" --out <FILENAME> --experiences <KEY1,KEY2> --projects <KEY1,KEY2>
