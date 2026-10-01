@@ -1,3 +1,5 @@
+> Note: After using this tool myself for a little bit, I've found it easier to format my resume by copying the cleaned up bullet points into my native LaTex editor (e.g., Overleaf, IDE, etc.), with the original Jake's Engineering Template since it comes out cleaner.
+
 # agentic-resume-builder
 
 > **An Agentic-Native Resume Engineering Engine built around *you* and *your AI assistant*—not the other way around.**
